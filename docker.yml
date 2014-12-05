@@ -1,0 +1,38 @@
+---
+- hosts: proxies
+  roles:
+    - angstwad.docker_ubuntu
+  tasks:
+    - name: copy Dockerfile
+      copy:
+        src: ./files/sniproxy/Dockerfile
+        dest: /root
+        owner: root
+        group: root
+        mode: 0400
+
+    - name: copy sniproxy.conf
+      copy:
+        src: ./files/sniproxy/sniproxy.conf
+        dest: /root
+        owner: root
+        group: root
+        mode: 0400
+
+    - name: build docker sniproxy image
+      docker_image:
+        path: /root
+        name: sniproxy
+        state: build
+
+    - name: run docker sniproxy container
+      docker:
+        image: sniproxy
+        name: sniproxy_ansible
+        ports:
+          - "443:443"
+          - "80:80"
+
+  handlers:
+    - name: Start Docker
+      service: name=docker.io state=started
