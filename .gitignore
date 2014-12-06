@@ -1,3 +1,5 @@
-/hosts
+/provisioning/hosts
 /Vagrantfile
 /.vagrant/
+/dns_server/vendor/bundle
+/dns_server/.bundle
